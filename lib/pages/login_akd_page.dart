@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login_mhs.dart'; // Untuk navigasi kembali ke halaman login mahasiswa
+import 'login_mhs_page.dart'; // Untuk navigasi kembali ke halaman login mahasiswa
 
 class LoginAkademikScreen extends StatefulWidget {
   const LoginAkademikScreen({super.key});
