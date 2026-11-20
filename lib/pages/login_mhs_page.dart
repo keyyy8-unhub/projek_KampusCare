@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login_akd_page.dart'; 
+import 'home_page.dart'; 
 
 class LoginMhsScreen extends StatefulWidget {
   const LoginMhsScreen({super.key});
@@ -9,262 +9,264 @@ class LoginMhsScreen extends StatefulWidget {
 }
 
 class _LoginMhsScreenState extends State<LoginMhsScreen> {
-  final bool _isMahasiswaSelected = true; // Karena ini halaman Mahasiswa, tetap true
-  bool _obscurePassword = true;
-
   final TextEditingController _nimController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _obscurePassword = true;
+
+  @override
+  void dispose() {
+    // Bersihkan controller saat halaman ditutup dari memori
+    _nimController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFC8D9E6), // Warna latar belakang Sky Blue
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      backgroundColor: const Color(0xFFA8C5DF),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Container(
+            padding: const EdgeInsets.all(24.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(24.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha:0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                // Judul Halaman di atas Card
+                // Logo & Header KampusCare
+                const Icon(
+                  Icons.home_work_rounded,
+                  size: 64,
+                  color: Color(0xFF1E293B),
+                ),
+                const SizedBox(height: 12),
                 const Text(
-                  'LOGIN MAHASISWA',
+                  'KampusCare',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 26,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF2F4156),
-                    letterSpacing: 1.2,
+                    color: Color(0xFF1E293B),
+                    letterSpacing: 0.5,
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 4),
+                const Text(
+                  'Laporkan, Pantau, Perbaiki',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Color(0xFF64748B),
+                  ),
+                ),
+                const SizedBox(height: 24),
 
-                // Card Putih Utama
+                // Toggle Role: Mahasiswa (Aktif) & Akademik (Non-aktif / tanpa navigasi)
                 Container(
-                  padding: const EdgeInsets.all(24.0),
+                  padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
+                    color: const Color(0xFFF1F5F9),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      // Tombol Mahasiswa (Aktif)
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF1E293B),
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          child: const Text(
+                            'Mahasiswa',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      // Tombol Akademik (Tanpa navigasi)
+                      Expanded(
+                        child: TextButton(
+                          onPressed: null,
+                          style: TextButton.styleFrom(
+                            foregroundColor: const Color(0xFF64748B),
+                            backgroundColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          child: const Text(
+                            'Akademik',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF64748B),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  child: Column(
-                    children: [
-                      // Logo & Brand KampusCare
-                      const Icon(
-                        Icons.home_work_rounded,
-                        size: 50,
-                        color: Color(0xFF2F4156),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'KampusCare',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF2F4156),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      const Text(
-                        'Laporkan, Pantau, Perbaiki',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Color(0xFF567C8D),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
+                ),
+                const SizedBox(height: 24),
 
-                      // Toggle Peran (Mahasiswa / Akademik)
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF0F4F8),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Row(
-                          children: [
-                            // Tombol Mahasiswa (Aktif di sini)
-                            Expanded(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF2F4156),
-                                  borderRadius: BorderRadius.circular(24),
-                                ),
-                                child: const Text(
-                                  'Mahasiswa',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            // Tombol Akademik (DIUBAH KE NAVIGATOR AGAR PINDAH HALAMAN)
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const LoginAkademikScreen(),
-                                    ),
-                                  );
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
-                                  alignment: Alignment.center,
-                                  child: const Text(
-                                    'Akademik',
-                                    style: TextStyle(
-                                      color: Color(0xFF567C8D),
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 24),
+                // Input NIM
+                TextField(
+                  controller: _nimController,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.person_outline, color: Color(0xFF64748B)),
+                    hintText: 'NIM',
+                    hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
+                    filled: true,
+                    fillColor: const Color(0xFFF8FAFC),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
 
-                      // Input NIM
-                      TextField(
-                        controller: _nimController,
-                        decoration: InputDecoration(
-                          hintText: 'NIM',
-                          hintStyle: const TextStyle(color: Colors.grey),
-                          prefixIcon: const Icon(Icons.person_outline, color: Color(0xFF567C8D)),
-                          filled: true,
-                          fillColor: const Color(0xFFF9FBFC),
-                          contentPadding: const EdgeInsets.symmetric(vertical: 16),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
-                        ),
+                // Input Password
+                TextField(
+                  controller: _passwordController,
+                  obscureText: _obscurePassword,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF64748B)),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                        color: const Color(0xFF64748B),
                       ),
-                      const SizedBox(height: 16),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                    ),
+                    hintText: 'Password',
+                    hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
+                    filled: true,
+                    fillColor: const Color(0xFFF8FAFC),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
 
-                      // Input Password
-                      TextField(
-                        controller: _passwordController,
-                        obscureText: _obscurePassword,
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          hintStyle: const TextStyle(color: Colors.grey),
-                          prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF567C8D)),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                              color: Colors.grey,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _obscurePassword = !_obscurePassword;
-                              });
-                            },
-                          ),
-                          filled: true,
-                          fillColor: const Color(0xFFF9FBFC),
-                          contentPadding: const EdgeInsets.symmetric(vertical: 16),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
+                // Tombol Login Utama -> Tutup halaman login permanen ke Home
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const BerandaMahasiswaPage(), // Ganti sesuai nama class Home kamu
                         ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF1E293B),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      const SizedBox(height: 24),
-
-                      // Tombol Login
-                      SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Aksi tombol login
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF2F4156),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            elevation: 0,
-                          ),
-                          child: const Text(
-                            'Login',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
+                      elevation: 0,
+                    ),
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
-                      const SizedBox(height: 16),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
 
-                      const Text(
+                // Divider "atau"
+                Row(
+                  children: const [
+                    Expanded(child: Divider(color: Color(0xFFE2E8F0))),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
                         'atau',
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                        style: TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
                       ),
-                      const SizedBox(height: 16),
+                    ),
+                    Expanded(child: Divider(color: Color(0xFFE2E8F0))),
+                  ],
+                ),
+                const SizedBox(height: 16),
 
-                      // Tombol Daftar Akun
-                      SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: OutlinedButton(
-                          onPressed: () {
-                            // Aksi daftar akun
-                          },
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: Colors.grey.shade300),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: const Text(
-                            'Daftar Akun',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Color(0xFF2F4156),
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
+                // Tombol Daftar Akun
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      // Aksi navigasi ke halaman pendaftaran
+                    },
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: const Color(0xFF1E293B),
+                      side: const BorderSide(color: Color(0xFFCBD5E1)),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      const SizedBox(height: 16),
+                    ),
+                    child: const Text(
+                      'Daftar Akun',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
 
-                      // Tautan Lupa Password
-                      GestureDetector(
-                        onTap: () {
-                          // Aksi lupa password
-                        },
-                        child: const Text(
-                          'Lupa password?',
-                          style: TextStyle(
-                            color: Color(0xFF567C8D),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
+                // Lupa Password
+                TextButton(
+                  onPressed: () {
+                    // Aksi lupa password
+                  },
+                  child: const Text(
+                    'Lupa password?',
+                    style: TextStyle(
+                      color: Color(0xFF64748B),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ],
