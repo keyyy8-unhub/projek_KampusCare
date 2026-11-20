@@ -1,14 +1,32 @@
 import 'package:flutter/material.dart';
+import 'riwayat_laporan.dart';
+import 'profil_page.dart';
+
 
 class BerandaMahasiswaPage extends StatelessWidget {
   const BerandaMahasiswaPage({super.key});
 
+  static const Color navyColor = Color(0xFF2F4156);
+  static const Color tealColor = Color(0xFF567C8D);
+
+  void _onNavTapped(BuildContext context, int index) {
+  if (index == 0) return;
+
+  if (index == 1) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const RiwayatLaporanPage()),
+    );
+  } else if (index == 2) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const HalamanProfilMhs()),
+    );
+  }
+}
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    const Color navyColor = Color(0xFF2F4156);
-    const Color tealColor = Color(0xFF567C8D);
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -17,14 +35,13 @@ class BerandaMahasiswaPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-              //Header Selamat datang dan Profil
+              // Header Selamat datang dan Profil
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const[
+                    children: const [
                       Text(
                         'Halo,',
                         style: TextStyle(
@@ -55,12 +72,12 @@ class BerandaMahasiswaPage extends StatelessWidget {
                     radius: 24,
                     backgroundColor: tealColor,
                     child: Icon(Icons.person, color: Colors.white, size: 30),
-                  )
+                  ),
                 ],
               ),
               const SizedBox(height: 20),
 
-              //card Tombol buat laporan 
+              // Card Tombol buat laporan
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
@@ -116,7 +133,7 @@ class BerandaMahasiswaPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              //Status Laporan
+              // Status Laporan
               Row(
                 children: [
                   Expanded(
@@ -136,7 +153,7 @@ class BerandaMahasiswaPage extends StatelessWidget {
               ),
               const SizedBox(height: 24),
 
-              //Header Laporan terbaru
+              // Header Laporan terbaru
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -162,7 +179,7 @@ class BerandaMahasiswaPage extends StatelessWidget {
               ),
               const SizedBox(height: 10),
 
-              //List untuk laporan terbaru
+              // List untuk laporan terbaru
               _buildReportItem(
                 title: 'AC Ruang 302',
                 subTitle: 'Gedung FEBI',
@@ -191,10 +208,36 @@ class BerandaMahasiswaPage extends StatelessWidget {
           ),
         ),
       ),
+
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0, // 0 = Home, 1 = Laporan, 2 = Profil
+        onTap: (index) => _onNavTapped(context, index),
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
+        selectedItemColor: tealColor,
+        unselectedItemColor: Colors.grey,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.description_outlined),
+            activeIcon: Icon(Icons.description),
+            label: 'Laporan',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
+            label: 'Profil',
+          ),
+        ],
+      ),
     );
   }
 
-  //Widget tambahan buat Box status
+  // Widget Box status
   static Widget _buildStatusCard({required String number, required String label}) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
@@ -226,7 +269,7 @@ class BerandaMahasiswaPage extends StatelessWidget {
     );
   }
 
-  //Widget buat list Item Laporan
+  // Widget buat list Item Laporan
   static Widget _buildReportItem({
     required String title,
     required String subTitle,

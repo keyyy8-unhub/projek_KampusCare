@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'home_page.dart';
+import 'riwayat_laporan.dart';
 
 class HalamanProfilMhs extends StatelessWidget {
-  const HalamanProfilMhs ({super.key});
-
+  const HalamanProfilMhs({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,12 @@ class HalamanProfilMhs extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: navyColor),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const BerandaMahasiswaPage()),
+            );
+          },
         ),
         title: const Text(
           'Profil Mahasiswa',
@@ -61,27 +67,27 @@ class HalamanProfilMhs extends StatelessWidget {
               const SizedBox(height: 30),
 
               _buildInfoItem(
-                icon : Icons.school_outlined,
-                label : 'Program Studi',
-                value : 'Teknologi Informasi',
+                icon: Icons.school_outlined,
+                label: 'Program Studi',
+                value: 'Teknologi Informasi',
               ),
               const SizedBox(height: 16),
 
               _buildInfoItem(
-                icon : Icons.account_balance_outlined,
-                label : 'Fakultas',
-                value : 'Sains dan Teknologi',
+                icon: Icons.account_balance_outlined,
+                label: 'Fakultas',
+                value: 'Sains dan Teknologi',
               ),
               const SizedBox(height: 16),
 
               _buildInfoItem(
-                icon : Icons.email_outlined,
-                label :'Email',
-                value : 'barokatusstaniah@gmail.com',
+                icon: Icons.email_outlined,
+                label: 'Email',
+                value: 'barokatusstaniah@gmail.com',
               ),
               const SizedBox(height: 36),
 
-              //edit profil
+              // edit profil
               OutlinedButton.icon(
                 onPressed: () {},
                 icon: const Icon(Icons.person_outline, color: navyColor),
@@ -102,7 +108,7 @@ class HalamanProfilMhs extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
-              //Tombol Logout
+              // Tombol Logout
               OutlinedButton.icon(
                 onPressed: () {},
                 icon: const Icon(Icons.logout, color: Colors.redAccent),
@@ -125,10 +131,49 @@ class HalamanProfilMhs extends StatelessWidget {
           ),
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 2, // 0 = Home, 1 = Laporan, 2 = Profil
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
+        selectedItemColor: tealColor,
+        unselectedItemColor: Colors.grey,
+        onTap: (index) {
+          if (index == 2) return; // Sudah di Profil
+
+          if (index == 0) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const BerandaMahasiswaPage()),
+            );
+          } else if (index == 1) {
+            
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const RiwayatLaporanPage()),
+            );
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.description_outlined),
+            activeIcon: Icon(Icons.description),
+            label: 'Laporan',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
+            label: 'Profil',
+          ),
+        ],
+      ),
     );
   }
 
-  //widget pembantu di bagian baris info profil
   static Widget _buildInfoItem({
     required IconData icon,
     required String label,
@@ -156,9 +201,9 @@ class HalamanProfilMhs extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 color: Color(0xFF2F4156),
               ),
-            )
+            ),
           ],
-        )
+        ),
       ],
     );
   }

@@ -22,7 +22,7 @@ class _BuatLaporanPageState extends State<BuatLaporanPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF1E293B)),
           onPressed: () {
-            Navigator.pop(context); // Kembali ke halaman sebelumnya (Beranda)
+            Navigator.pop(context); // Kembali ke halaman sebelumnya
           },
         ),
         title: const Text(
@@ -152,7 +152,7 @@ class _BuatLaporanPageState extends State<BuatLaporanPage> {
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<String>(
-              value: selectedKategori,
+              initialValue: selectedKategori,
               decoration: InputDecoration(
                 hintText: "Pilih Kategori",
                 hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),

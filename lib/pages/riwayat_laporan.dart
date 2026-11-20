@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'home_page.dart';
+import 'profil_page.dart';
 
 class RiwayatLaporanPage extends StatelessWidget {
   const RiwayatLaporanPage({super.key});
@@ -13,7 +15,10 @@ class RiwayatLaporanPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF1E293B)),
           onPressed: () {
-            // Aksi tombol kembali
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const BerandaMahasiswaPage()),
+            );
           },
         ),
         title: const Text(
@@ -42,7 +47,7 @@ class RiwayatLaporanPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          
+
           // Daftar List Riwayat Laporan
           Expanded(
             child: ListView(
@@ -96,19 +101,40 @@ class RiwayatLaporanPage extends StatelessWidget {
       // Navigasi Bawah (Bottom Navigation Bar)
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 1, // Indeks 1 aktif di menu "Laporan"
-        selectedItemColor: const Color(0xFF1E293B),
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
+        selectedItemColor: const Color(0xFF567C8D),
         unselectedItemColor: Colors.grey,
+        onTap: (index) {
+          if (index == 1) return; // Sudah di halaman Laporan
+
+          if (index == 0) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const BerandaMahasiswaPage()),
+            );
+          } else if (index == 2) {
+
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const HalamanProfilMhs()),
+            );
+          }
+        },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.description),
+            icon: Icon(Icons.description_outlined),
+            activeIcon: Icon(Icons.description),
             label: "Laporan",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
             label: "Profil",
           ),
         ],
@@ -154,7 +180,7 @@ class RiwayatLaporanPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.08),
+            color: Colors.grey.withValues(alpha: 0.08),
             spreadRadius: 1,
             blurRadius: 5,
             offset: const Offset(0, 2),
@@ -174,7 +200,7 @@ class RiwayatLaporanPage extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          
+
           // Informasi teks (Judul, Lokasi, Badge Status)
           Expanded(
             child: Column(
@@ -215,7 +241,7 @@ class RiwayatLaporanPage extends StatelessWidget {
               ],
             ),
           ),
-          
+
           // Tanggal di sebelah kanan
           Text(
             date,

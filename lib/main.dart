@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:proyek_kampuscare/pages/home_page.dart';
-import 'pages/buat_laporan_mhs.dart';
 
 void main() {
-  runApp(KampusCare());
+  runApp(const KampusCare());
 }
 
 class KampusCare extends StatelessWidget {
@@ -13,9 +12,7 @@ class KampusCare extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BuatLaporanPage(),
+      home: BerandaMahasiswaPage(),
     );
   }
 }
-
-
