@@ -1,9 +1,28 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'profil_page.dart';
+import 'buat_laporan_mhs.dart';
 
-class RiwayatLaporanPage extends StatelessWidget {
+class RiwayatLaporanPage extends StatefulWidget {
   const RiwayatLaporanPage({super.key});
+
+  @override
+  State<RiwayatLaporanPage> createState() => _RiwayatLaporanPageState();
+}
+
+class _RiwayatLaporanPageState extends State<RiwayatLaporanPage> {
+  String selectedFilter = "Semua";
+
+  (Color, Color) _warnaStatus(String status) {
+    switch (status) {
+      case "Diproses":
+        return (Colors.blue.shade700, Colors.blue.shade100);
+      case "Selesai":
+        return (Colors.green.shade700, Colors.green.shade100);
+      default:
+        return (Colors.amber.shade800, Colors.amber.shade100);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,75 +57,65 @@ class RiwayatLaporanPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Row(
               children: [
-                _buildFilterButton("Semua", true),
+                _buildFilterButton("Semua"),
                 const SizedBox(width: 8),
-                _buildFilterButton("Diproses", false),
+                _buildFilterButton("Diproses"),
                 const SizedBox(width: 8),
-                _buildFilterButton("Selesai", false),
+                _buildFilterButton("Selesai"),
               ],
             ),
           ),
           const SizedBox(height: 8),
 
-          // Daftar List Riwayat Laporan
+          // Daftar List Riwayat Laporan dari daftarLaporanNotifier
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              children: [
-                _buildReportItem(
-                  title: "AC Ruang 302",
-                  location: "Gedung FEBI",
-                  date: "12 Juni 2026",
-                  status: "Diajukan",
-                  statusColor: Colors.amber.shade800,
-                  statusBg: Colors.amber.shade100,
-                ),
-                _buildReportItem(
-                  title: "Toilet Lt. 1",
-                  location: "Gedung Rektorat",
-                  date: "11 Juni 2026",
-                  status: "Diproses",
-                  statusColor: Colors.blue.shade700,
-                  statusBg: Colors.blue.shade100,
-                ),
-                _buildReportItem(
-                  title: "Lampu kelas",
-                  location: "Gedung FST",
-                  date: "9 Juni 2026",
-                  status: "Selesai",
-                  statusColor: Colors.green.shade700,
-                  statusBg: Colors.green.shade100,
-                ),
-                _buildReportItem(
-                  title: "Meja rusak",
-                  location: "Gedung FTIK",
-                  date: "8 Juni 2026",
-                  status: "Selesai",
-                  statusColor: Colors.green.shade700,
-                  statusBg: Colors.green.shade100,
-                ),
-                _buildReportItem(
-                  title: "WIFI lemah",
-                  location: "Gedung Perpustakaan",
-                  date: "6 Juni 2026",
-                  status: "Diproses",
-                  statusColor: Colors.blue.shade700,
-                  statusBg: Colors.blue.shade100,
-                ),
-              ],
+            child: ValueListenableBuilder<List<LaporanItem>>(
+              valueListenable: daftarLaporanNotifier,
+              builder: (context, semuaLaporan, _) {
+                final filteredList = selectedFilter == "Semua"
+                    ? semuaLaporan
+                    : semuaLaporan
+                        .where((item) => item.status == selectedFilter)
+                        .toList();
+
+                if (filteredList.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      "Belum ada laporan pada status ini.",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  );
+                }
+
+                return ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  itemCount: filteredList.length,
+                  itemBuilder: (context, index) {
+                    final item = filteredList[index];
+                    final (textColor, bgColor) = _warnaStatus(item.status);
+                    return _buildReportItem(
+                      title: item.fasilitas,
+                      location: item.lokasi,
+                      date: item.waktu,
+                      status: item.status,
+                      statusColor: textColor,
+                      statusBg: bgColor,
+                    );
+                  },
+                );
+              },
             ),
           ),
         ],
       ),
-      // Navigasi Bawah (Bottom Navigation Bar)
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1, // Indeks 1 aktif di menu "Laporan"
+        currentIndex: 1,
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         selectedItemColor: const Color(0xFF567C8D),
         unselectedItemColor: Colors.grey,
         onTap: (index) {
-          if (index == 1) return; // Sudah di halaman Laporan
+          if (index == 1) return;
 
           if (index == 0) {
             Navigator.pushReplacement(
@@ -114,7 +123,6 @@ class RiwayatLaporanPage extends StatelessWidget {
               MaterialPageRoute(builder: (_) => const BerandaMahasiswaPage()),
             );
           } else if (index == 2) {
-
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (_) => const HalamanProfilMhs()),
@@ -142,28 +150,35 @@ class RiwayatLaporanPage extends StatelessWidget {
     );
   }
 
-  // Widget untuk tombol filter di atas
-  Widget _buildFilterButton(String text, bool isSelected) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      decoration: BoxDecoration(
-        color: isSelected ? const Color(0xFF2C3E50) : Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: isSelected ? const Color(0xFF2C3E50) : Colors.grey.shade300,
+  Widget _buildFilterButton(String text) {
+    final bool isSelected = selectedFilter == text;
+    return InkWell(
+      borderRadius: BorderRadius.circular(20),
+      onTap: () {
+        setState(() {
+          selectedFilter = text;
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFF2C3E50) : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected ? const Color(0xFF2C3E50) : Colors.grey.shade300,
+          ),
         ),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: isSelected ? Colors.white : Colors.grey.shade700,
-          fontWeight: FontWeight.w600,
+        child: Text(
+          text,
+          style: TextStyle(
+            color: isSelected ? Colors.white : Colors.grey.shade700,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     );
   }
 
-  // Widget untuk setiap baris daftar laporan
   Widget _buildReportItem({
     required String title,
     required String location,
@@ -190,7 +205,6 @@ class RiwayatLaporanPage extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Kotak gambar thumbnail di sebelah kiri
           Container(
             width: 60,
             height: 60,
@@ -200,8 +214,6 @@ class RiwayatLaporanPage extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-
-          // Informasi teks (Judul, Lokasi, Badge Status)
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,8 +253,6 @@ class RiwayatLaporanPage extends StatelessWidget {
               ],
             ),
           ),
-
-          // Tanggal di sebelah kanan
           Text(
             date,
             style: TextStyle(
