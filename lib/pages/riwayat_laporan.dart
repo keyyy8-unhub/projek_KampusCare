@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'buat_laporan_mhs.dart';
+import 'detail_laporan.dart'; // Sesuaikan path jika berada di subfolder
 import 'home_page.dart';
 import 'profil_page.dart';
-import 'buat_laporan_mhs.dart';
 
 class RiwayatLaporanPage extends StatefulWidget {
   const RiwayatLaporanPage({super.key});
@@ -93,6 +94,9 @@ class _RiwayatLaporanPageState extends State<RiwayatLaporanPage> {
                   itemBuilder: (context, index) {
                     final item = filteredList[index];
                     final (textColor, bgColor) = _warnaStatus(item.status);
+                    final bool bisaBukaDetail =
+                        index == 0 || item.fasilitas == "AC Ruang 302";
+
                     return _buildReportItem(
                       title: item.fasilitas,
                       location: item.lokasi,
@@ -100,6 +104,21 @@ class _RiwayatLaporanPageState extends State<RiwayatLaporanPage> {
                       status: item.status,
                       statusColor: textColor,
                       statusBg: bgColor,
+                      onTap: bisaBukaDetail
+                          ? () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => DetailLaporanPage(
+                                    title: item.fasilitas,
+                                    location: item.lokasi,
+                                    date: item.waktu,
+                                    status: item.status,
+                                  ),
+                                ),
+                              );
+                            }
+                          : () {},
                     );
                   },
                 );
@@ -186,10 +205,10 @@ class _RiwayatLaporanPageState extends State<RiwayatLaporanPage> {
     required String status,
     required Color statusColor,
     required Color statusBg,
+    required VoidCallback onTap,
   }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -202,65 +221,75 @@ class _RiwayatLaporanPageState extends State<RiwayatLaporanPage> {
           ),
         ],
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    color: Color(0xFF1E293B),
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  location,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.grey.shade600,
-                  ),
-                ),
-                const SizedBox(height: 6),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  width: 60,
+                  height: 60,
                   decoration: BoxDecoration(
-                    color: statusBg,
-                    borderRadius: BorderRadius.circular(6),
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Text(
-                    status,
-                    style: TextStyle(
-                      color: statusColor,
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                    ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Color(0xFF1E293B),
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        location,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: statusBg,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          status,
+                          style: TextStyle(
+                            color: statusColor,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Text(
+                  date,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey.shade500,
                   ),
                 ),
               ],
             ),
           ),
-          Text(
-            date,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey.shade500,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
