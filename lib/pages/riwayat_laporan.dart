@@ -20,7 +20,7 @@ class _RiwayatLaporanPageState extends State<RiwayatLaporanPage> {
         return (Colors.blue.shade700, Colors.blue.shade100);
       case "Selesai":
         return (Colors.green.shade700, Colors.green.shade100);
-      default:
+       default:
         return (Colors.amber.shade800, Colors.amber.shade100);
     }
   }
@@ -53,12 +53,14 @@ class _RiwayatLaporanPageState extends State<RiwayatLaporanPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Filter Tab Atas (Semua, Diproses, Selesai)
+          // Filter Tab Atas (Semua, Diajukan, Diproses, Selesai)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Row(
               children: [
                 _buildFilterButton("Semua"),
+                const SizedBox(width: 8),
+                 _buildFilterButton("Diajukan"),
                 const SizedBox(width: 8),
                 _buildFilterButton("Diproses"),
                 const SizedBox(width: 8),
